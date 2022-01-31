@@ -21,9 +21,11 @@ export const MESSAGES_GET_FAILURE = 'messages/get/failure'
 export const MESSAGE_SEND_REQUEST = 'messages/post/request';
 export const MESSAGE_SEND_SUCCESS = 'messages/post/success';
 export const MESSAGE_SEND_FAILURE = 'messages/post/failure';
-export const FETCHING_TOGGLE = 'messages/fetching-toggle'
-export const STATUS_REQUEST = 'status/request'
-export const STATUS_COMPLETE = 'status/complete'
+export const FETCHING_TOGGLE = 'messages/fetching-toggle';
+export const STATUS_REQUEST = 'status/request';
+export const STATUS_COMPLETE = 'status/complete';
+export const ADD_LOG_RECORD = 'log/add';
+export const CLEAN_LOG_LIST = 'log/clean';
 
 const initialState = {
     userName: null,
@@ -43,6 +45,7 @@ const initialState = {
         isActiveStatusRequest: false,
     },
     messageFetchingEnabled: true,
+    appLog: [],
 };
 
 export default (state = initialState, action) => {
@@ -94,6 +97,11 @@ export default (state = initialState, action) => {
         case FETCHING_TOGGLE:
             return { ...state, messageFetchingEnabled: !state.messageFetchingEnabled };
 
+        case ADD_LOG_RECORD:
+            const { record } = payload;
+            return { ...state, appLog: [ ...state.appLog, record ] };
+        case CLEAN_LOG_LIST:
+            return { ...state, appLog: [] };
 
         default:
             return state;
@@ -113,8 +121,6 @@ export const authUserAction = (userName) => async (dispatch) => {
 }
 
 export const setUserDataAction = (userName, userToken) => async (dispatch) => {
-
-    console.log('▶️ Call setUserDataAction', userName, userToken);
 
     dispatch({ type: STATUS_REQUEST });
     const { errorCode } = await requestStatus(userToken);
@@ -173,6 +179,13 @@ export const sendMessageAction = (message) => async (dispatch, getState) => {
 export const clearLoginErrorAction = () => (dispatch) => dispatch({ type: CLEAR_LOGIN_ERROR });
 export const toggleMessageFetching = () => (dispatch) => dispatch({ type: FETCHING_TOGGLE });
 
+//Log Actions
+
+export const cleanLogAction = () => (dispatch) => dispatch({ type: CLEAN_LOG_LIST });
+export const addLogRecordAction = (logRecord) => async (dispatch) => {
+    dispatch({ type: ADD_LOG_RECORD, payload: { record: logRecord  } });
+}
+
 //Selectors
 export const loginStatusSelector = (state) => state.requestStatuses.isActiveLoginRequest;
 export const logoutStatusSelector = (state) => state.requestStatuses.isActiveLogoutRequest;
@@ -183,5 +196,6 @@ export const connectionStatusSelector = (state) => state.server.status;
 export const userDataSelector = ({ userName, userToken }) => ({ userName, userToken });
 export const messagesSelector = (state) => state.messages;
 export const messageFetchingEnabledStatus = (state) => state.messageFetchingEnabled;
+export const getApplicationLog = (state) => state.appLog;
 
 

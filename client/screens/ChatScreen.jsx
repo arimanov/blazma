@@ -3,6 +3,7 @@ import { format, parseISO } from 'date-fns'
 import { useDispatch, useSelector } from 'react-redux';
 import { sendMessageAction, messagesSelector } from '../redux/reducers';
 import useMessageFetch from '../hooks/useMessageFetch';
+import useLog from '../hooks/useLog';
 import SendMessageCtrl from '../components/SendMessageCtrl';
 import colors from '../utils/appColors';
 import {
@@ -15,12 +16,11 @@ import {
     Keyboard
 } from 'react-native';
 
-const parseDateTime = (datetime) => format(parseISO(datetime), 'dd.MM.yyyy HH:mm');
-
 export default () => {
     const dispatch = useDispatch();
     const scrollViewRef = useRef();
     const messages = useSelector(messagesSelector);
+    const { info } = useLog();
 
     useMessageFetch();
 
@@ -29,7 +29,10 @@ export default () => {
         const messageSendPromise = dispatch(sendMessageAction(message));
         Keyboard.dismiss();
         messageSendPromise.then((requestStatus) => cb(requestStatus));
+        info('Send message');
     }
+
+    const parseDateTime = (datetime) => format(parseISO(datetime), 'dd.MM.yyyy HH:mm');
 
     return (
         <SafeAreaView style = {styles.container}>
