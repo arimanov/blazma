@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import { screens } from '../utils/constants';
 import SidebarButton from './SidebarButton';
-import { logoutStatusSelector, logoutUserAction, userDataSelector } from '../redux/reducers';
+import { logoutUserAction } from '../redux/actions';
+import { logoutStatusSelector, userDataSelector } from '../redux/selectors';
 import { unsetUserData } from '../hooks/useAuthData';
 import colors from '../utils/appColors';
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
-import { setUserDataAction } from '../redux/reducers';
+import { setUserDataAction } from '../redux/actions';
 import useLog from './useLog';
 
 export default () => {

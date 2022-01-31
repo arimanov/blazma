@@ -18,14 +18,8 @@ import Input from '../components/Input';
 import {screens} from '../utils/constants';
 import useAuthData from '../hooks/useAuthData';
 import colors from '../utils/appColors';
-import {
-  loginErrorSelector,
-  authUserAction,
-  loginStatusSelector,
-  clearLoginErrorAction,
-  userDataSelector,
-  statusRequestSelector,
-} from '../redux/reducers';
+import { authUserAction, clearLoginErrorAction } from '../redux/actions';
+import { loginErrorSelector, loginStatusSelector, userDataSelector, statusRequestSelector } from '../redux/selectors';
 import { APP_VERSION } from '@env';
 
 export default () => {

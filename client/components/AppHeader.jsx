@@ -3,7 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Pressable, Image, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchMessageActiveSelector, messageFetchingEnabledStatus, toggleMessageFetching } from '../redux/reducers';
+import { toggleMessageFetching } from '../redux/actions';
+import { fetchMessageActiveSelector, messageFetchingEnabledStatus } from '../redux/selectors';
 import Indicator from './Indicator';
 import colors from '../utils/appColors';
 

@@ -1,14 +1,4 @@
-import { format } from 'date-fns'
 import cultivateMessages from "../utils/cultivateMessages";
-
-import {
-    requestStatus,
-    requestUserAuth,
-    requestUserLogout,
-    requestGetMessages,
-    requestSendMessage
-} from '../utils/httpService';
-
 export const LOGIN_REQUEST = 'login/request';
 export const LOGIN_SUCCESS = 'login/success';
 export const LOGIN_FAILURE = 'login/failure';
@@ -60,24 +50,17 @@ export default (state = initialState, action) => {
             return { ...state, userName, userToken, requestStatuses: { ...state.requestStatuses, isActiveLoginRequest: false } };
         case LOGIN_FAILURE:
             const { errorLoginRequest } = payload;
-            return { ...state, requestStatuses: {
-                    ...state.requestStatuses, isActiveLoginRequest: false, errorLoginRequest,
-                }};
+            return { ...state, requestStatuses: { ...state.requestStatuses, isActiveLoginRequest: false, errorLoginRequest }};
         case LOGOUT_REQUEST:
             return { ...state, requestStatuses: { ...state.requestStatuses, isActiveLogoutRequest: true } };
         case LOGOUT_COMPLETE:
             return { ...state, messages: [], userName: null, userToken: null, requestStatuses: { ...state.requestStatuses, isActiveLogoutRequest: false } };
-
-
         case STATUS_REQUEST:
             return { ...state, requestStatuses: { ...state.requestStatuses, isActiveStatusRequest: true } };
         case STATUS_COMPLETE:
             return { ...state, requestStatuses: { ...state.requestStatuses, isActiveStatusRequest: false } };
-
-
         case CLEAR_LOGIN_ERROR:
             return { ...state, requestStatuses: { ...state.requestStatuses, errorLoginRequest: null } };
-
         case MESSAGES_GET_REQUEST:
             return { ...state, requestStatuses: { ...state.requestStatuses, isActiveGetMessageRequest: true } };
         case MESSAGES_GET_SUCCESS:
@@ -85,7 +68,6 @@ export default (state = initialState, action) => {
             return { ...state, messages: cultivateMessages(state.messages, messages, state.userName), requestStatuses: { ...state.requestStatuses, isActiveGetMessageRequest: false } };
         case MESSAGES_GET_FAILURE:
             return { ...state, requestStatuses: { ...state.requestStatuses, isActiveGetMessageRequest: false } };
-
         case MESSAGE_SEND_REQUEST:
             return { ...state, requestStatuses: { ...state.requestStatuses, isActiveSendMessageRequest: true } };
         case MESSAGE_SEND_SUCCESS:
@@ -93,109 +75,15 @@ export default (state = initialState, action) => {
             return { ...state, messages: cultivateMessages(state.messages, [message], state.userName), requestStatuses: { ...state.requestStatuses, isActiveSendMessageRequest: false } };
         case MESSAGE_SEND_FAILURE:
             return { ...state, requestStatuses: { ...state.requestStatuses, isActiveSendMessageRequest: false } };
-
         case FETCHING_TOGGLE:
             return { ...state, messageFetchingEnabled: !state.messageFetchingEnabled };
-
         case ADD_LOG_RECORD:
             const { record } = payload;
             return { ...state, appLog: [ ...state.appLog, record ] };
         case CLEAN_LOG_LIST:
             return { ...state, appLog: [] };
-
         default:
             return state;
     }
 }
-
-//Actions
-export const authUserAction = (userName) => async (dispatch) => {
-    dispatch({ type: LOGIN_REQUEST });
-    const { token, userId, errorMessage, errorCode } = await requestUserAuth(userName);
-    if (errorMessage || errorCode) {
-        dispatch({ type: LOGIN_FAILURE, payload: { errorLoginRequest: `${errorCode}: ${errorMessage}` } });
-    }
-    else {
-        dispatch({ type: LOGIN_SUCCESS, payload: { userName: userName, userToken: token } });
-    }
-}
-
-export const setUserDataAction = (userName, userToken) => async (dispatch) => {
-
-    dispatch({ type: STATUS_REQUEST });
-    const { errorCode } = await requestStatus(userToken);
-    dispatch({ type: STATUS_COMPLETE });
-    if (errorCode) {
-        return false;
-    }
-    dispatch({ type: LOGIN_SUCCESS, payload: { userName, userToken } });
-    return true;
-}
-
-export const logoutUserAction = () => async (dispatch, getState) => {
-    const { userName, userToken } = getState();
-    dispatch({ type: LOGOUT_REQUEST });
-    await requestUserLogout(userName, userToken);
-    dispatch({ type: LOGOUT_COMPLETE });
-}
-
-export const fetchMessagesAction = () => async (dispatch, getState) => {
-
-        const ts = format(new Date(), 'mm:ss');
-
-        if (getState().userToken && !getState().requestStatuses.isActiveGetMessageRequest && getState().messageFetchingEnabled) {
-
-            console.log(ts, ': 🤎 Reducer run fetch');
-
-            dispatch({ type: MESSAGES_GET_REQUEST });
-
-            const { messages, errorMessage, errorCode  } = await requestGetMessages(getState().userToken, "");
-
-            if (errorMessage || errorCode) {
-                dispatch({ type: MESSAGES_GET_FAILURE, payload: { } });
-            }
-            else {
-                dispatch({ type: MESSAGES_GET_SUCCESS, payload: { messages } });
-            }
-        }
-        else {
-            console.log(ts, ': 💔 Reducer skip fetch');
-        }
-}
-
-export const sendMessageAction = (message) => async (dispatch, getState) => {
-    dispatch({ type: MESSAGE_SEND_REQUEST });
-    const { messageInfo, errorMessage, errorCode  } = await requestSendMessage(getState().userToken, message);
-    if (errorMessage || errorCode) {
-        dispatch({ type: MESSAGE_SEND_FAILURE });
-        return false;
-    }
-    else {
-        dispatch({ type: MESSAGE_SEND_SUCCESS, payload: { message: { ...messageInfo, message, userName: getState().userName } } });
-        return true;
-    }
-}
-
-export const clearLoginErrorAction = () => (dispatch) => dispatch({ type: CLEAR_LOGIN_ERROR });
-export const toggleMessageFetching = () => (dispatch) => dispatch({ type: FETCHING_TOGGLE });
-
-//Log Actions
-
-export const cleanLogAction = () => (dispatch) => dispatch({ type: CLEAN_LOG_LIST });
-export const addLogRecordAction = (logRecord) => async (dispatch) => {
-    dispatch({ type: ADD_LOG_RECORD, payload: { record: logRecord  } });
-}
-
-//Selectors
-export const loginStatusSelector = (state) => state.requestStatuses.isActiveLoginRequest;
-export const logoutStatusSelector = (state) => state.requestStatuses.isActiveLogoutRequest;
-export const fetchMessageActiveSelector = (state) => state.requestStatuses.isActiveGetMessageRequest;
-export const loginErrorSelector = (state) => state.requestStatuses.errorLoginRequest;
-export const statusRequestSelector = (state) => state.requestStatuses.isActiveStatusRequest;
-export const connectionStatusSelector = (state) => state.server.status;
-export const userDataSelector = ({ userName, userToken }) => ({ userName, userToken });
-export const messagesSelector = (state) => state.messages;
-export const messageFetchingEnabledStatus = (state) => state.messageFetchingEnabled;
-export const getApplicationLog = (state) => state.appLog;
-
 

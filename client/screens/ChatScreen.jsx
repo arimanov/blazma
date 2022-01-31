@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
 import { format, parseISO } from 'date-fns'
 import { useDispatch, useSelector } from 'react-redux';
-import { sendMessageAction, messagesSelector } from '../redux/reducers';
+import { sendMessageAction } from '../redux/actions';
+import { messagesSelector } from '../redux/selectors';
 import useMessageFetch from '../hooks/useMessageFetch';
 import useLog from '../hooks/useLog';
 import SendMessageCtrl from '../components/SendMessageCtrl';

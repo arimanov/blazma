@@ -1,0 +1,10 @@
+export const loginStatusSelector = (state) => state.requestStatuses.isActiveLoginRequest;
+export const logoutStatusSelector = (state) => state.requestStatuses.isActiveLogoutRequest;
+export const fetchMessageActiveSelector = (state) => state.requestStatuses.isActiveGetMessageRequest;
+export const loginErrorSelector = (state) => state.requestStatuses.errorLoginRequest;
+export const statusRequestSelector = (state) => state.requestStatuses.isActiveStatusRequest;
+export const connectionStatusSelector = (state) => state.server.status;
+export const userDataSelector = ({ userName, userToken }) => ({ userName, userToken });
+export const messagesSelector = (state) => state.messages;
+export const messageFetchingEnabledStatus = (state) => state.messageFetchingEnabled;
+export const getApplicationLog = (state) => state.appLog;

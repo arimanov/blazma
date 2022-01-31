@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns'
-import { getApplicationLog, cleanLogAction, addLogRecordAction } from '../redux/reducers';
+import { cleanLogAction, addLogRecordAction } from '../redux/actions';
+import { getApplicationLog } from '../redux/selectors';
 
 export default () => {
 
