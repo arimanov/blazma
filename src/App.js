@@ -1,3 +1,4 @@
+import { registerRootComponent } from 'expo';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -41,4 +42,6 @@ export default function App() {
     </Provider>
   );
 }
+
+registerRootComponent(App);
 
