@@ -5,20 +5,21 @@ import { setUserDataAction } from '../redux/actions';
 import useLog from './useLog';
 
 export default () => {
-
     const dispatch = useDispatch();
     const { info, error } = useLog();
 
-    useEffect(async () => {
-        const userName = await AsyncStorage.getItem('@userName');
-        const userToken = await AsyncStorage.getItem('@userToken');
-        if (userName && userToken) {
-            info(`use stored user auth data: ${userName}`);
-            const userIsExist = await dispatch(setUserDataAction(userName, userToken));
-            if (!userIsExist) {
-                await unsetUserData();
+    useEffect(() => {
+        (async ()=>{
+            const userName = await AsyncStorage.getItem('@userName');
+            const userToken = await AsyncStorage.getItem('@userToken');
+            if (userName && userToken) {
+                info(`use stored user auth data: ${userName}`);
+                const userIsExist = await dispatch(setUserDataAction(userName, userToken));
+                if (!userIsExist) {
+                    await unsetUserData();
+                }
             }
-        }
+        })();
     }, []);
 
     return {
@@ -38,6 +39,6 @@ export const unsetUserData = async () => {
         await AsyncStorage.removeItem('@userName');
         await AsyncStorage.removeItem('@userToken');
     } catch (e) {
-        error(e);
+        console.log(e);
     }
 }

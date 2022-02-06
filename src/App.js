@@ -1,39 +1,36 @@
-import { registerRootComponent } from 'expo';
 import React from 'react';
-import { Provider } from 'react-redux';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-
+import {Provider} from 'react-redux';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {NavigationContainer} from '@react-navigation/native';
 import AppHeader from './components/AppHeader';
 import Sidebar from './components/Sidebar';
-
 import store from './redux/store';
-
-import { screens } from './utils/constants'
-
+import {screens} from './utils/constants';
 import LoginScreen from './screens/LoginScreen';
 import ChatScreen from './screens/ChatScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import InfoScreen from './screens/InfoScreen';
 
 export default function App() {
-
   const Drawer = createDrawerNavigator();
 
   const loginScreenOptions = {
     header: () => null,
     swipeEnabled: false,
-  }
+  };
 
   return (
     <Provider store={store}>
       <NavigationContainer>
         <Drawer.Navigator
           initialRouteName={screens.LOGIN}
-          drawerContent={ (props) => <Sidebar {...props} /> }
-          screenOptions={ { header: () => <AppHeader/> } }
-        >
-          <Drawer.Screen name={screens.LOGIN} component={LoginScreen} options={loginScreenOptions} />
+          drawerContent={props => <Sidebar {...props} />}
+          screenOptions={{header: () => <AppHeader />}}>
+          <Drawer.Screen
+            name={screens.LOGIN}
+            component={LoginScreen}
+            options={loginScreenOptions}
+          />
           <Drawer.Screen name={screens.CHAT} component={ChatScreen} />
           <Drawer.Screen name={screens.SETTINGS} component={SettingsScreen} />
           <Drawer.Screen name={screens.INFO} component={InfoScreen} />
@@ -42,6 +39,3 @@ export default function App() {
     </Provider>
   );
 }
-
-registerRootComponent(App);
-

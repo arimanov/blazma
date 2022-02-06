@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import {StyleSheet, TextInput} from 'react-native';
 import PropTypes from 'prop-types';
 import colors from '../utils/appColors';
 
-const Input = ({ placeholder, onChange, editable }) => {
+const Input = ({placeholder, onChange, editable}) => {
   return (
     <TextInput
       editable={editable}
@@ -12,7 +12,7 @@ const Input = ({ placeholder, onChange, editable }) => {
       onChangeText={onChange}
     />
   );
-}
+};
 
 const styles = StyleSheet.create({
   input: {
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 5,
     borderColor: colors.blueSecond,
-  }
+  },
 });
 
 Input.propTypes = {

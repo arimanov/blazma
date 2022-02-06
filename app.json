@@ -1,31 +1,4 @@
 {
-  "expo": {
-    "name": "blazma-client",
-    "slug": "Blazma",
-    "version": "1.0",
-    "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
-    "splash": {
-      "image": "./src/assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#F6F8FA"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "ru.tsipun.blazma",
-      "buildNumber": "1.0.0"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    }
-  }
+  "name": "Blazma",
+  "displayName": "Blazma"
 }
